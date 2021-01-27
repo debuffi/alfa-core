@@ -1,0 +1,1 @@
+INSERT INTO box VALUES (0, null);
