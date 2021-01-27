@@ -18,9 +18,8 @@ public class ClasspathLoaderService implements XmlLoaderService {
 
     @Override
     public XmlFileContainer loadFile(final String file) throws IOException {
-        String xml = IOUtils.toString(getClass().getResourceAsStream(file), StandardCharsets.UTF_8.name());
-        System.out.println(xml);
-        return XmlFileContainer.newInstance(xml);
+        final String xmlBody = IOUtils.toString(getClass().getResource(file), StandardCharsets.UTF_8.name());
+        return XmlFileContainer.newInstance(xmlBody);
     }
 
     @Override

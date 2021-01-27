@@ -1,6 +1,7 @@
 package ru.alfa.test.core;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Arrays;
 
 import org.springframework.boot.CommandLineRunner;
@@ -36,7 +37,7 @@ public class CoreApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException {
+    public void run(String... args) throws IOException, URISyntaxException {
         appStartProcessor.process();
     }
 }

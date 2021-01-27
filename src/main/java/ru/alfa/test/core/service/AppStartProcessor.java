@@ -1,6 +1,7 @@
 package ru.alfa.test.core.service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
@@ -28,7 +29,7 @@ public class AppStartProcessor {
     private final Map<LinkType, XmlLoaderService> xmlLoaders;
 
 
-    public void process() throws IOException {
+    public void process() throws IOException, URISyntaxException {
         final Pair<String, String> typeFilePair = TypeFilePair.fromString(typeFile);
         final String type = typeFilePair.getKey();
         final String file = typeFilePair.getValue();
@@ -37,6 +38,6 @@ public class AppStartProcessor {
         final XmlLoaderService xmlLoader = xmlLoaders.get(linkType);
         final XmlFileContainer xmlFileContainer = xmlLoader.loadFile(file);
 
-        System.out.println("kek");
+        System.out.println(xmlFileContainer);
     }
 }
