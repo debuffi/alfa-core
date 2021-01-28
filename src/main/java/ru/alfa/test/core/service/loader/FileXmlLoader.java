@@ -15,7 +15,7 @@ import ru.alfa.test.core.domain.model.LinkType;
  * @since 25.01.2021
  */
 @Service
-public class FileLoaderService implements XmlLoaderService {
+public class FileXmlLoader implements XmlLoader {
 
     @Override
     public XmlFileContainer loadFile(final String file) throws IOException {

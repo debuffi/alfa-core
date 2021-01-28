@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import ru.alfa.test.core.domain.model.LinkType;
-import ru.alfa.test.core.service.loader.XmlLoaderService;
+import ru.alfa.test.core.service.loader.XmlLoader;
 
 /**
  * @author Vyacheslav Savinov
@@ -18,14 +18,9 @@ import ru.alfa.test.core.service.loader.XmlLoaderService;
 public class XmlLoadersConfig {
 
     @Bean
-    public Map<LinkType, XmlLoaderService> xmlLoaders(final List<XmlLoaderService> xmlLoaderServices) {
-        final Map<LinkType, XmlLoaderService> xmlLoadersMap = new HashMap<>();
-
-        for(XmlLoaderService xmlLoaderService: xmlLoaderServices){
-            final LinkType linkType = xmlLoaderService.getLinkType();
-            xmlLoadersMap.put(linkType, xmlLoaderService);
-        }
-
-        return xmlLoadersMap;
+    public Map<LinkType, XmlLoader> xmlLoaders(final List<XmlLoader> xmlLoaders) {
+        return new HashMap<LinkType, XmlLoader>() {{
+            xmlLoaders.forEach(xmlLoader -> put(xmlLoader.getLinkType(), xmlLoader));
+        }};
     }
 }

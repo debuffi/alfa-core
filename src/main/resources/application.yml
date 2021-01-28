@@ -10,5 +10,7 @@ spring:
     properties.hibernate.dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate.ddl-auto: create
 
+logging.level.ru.alfa.test.core: DEBUG
+
 link:
-  type:file: ${TYPE_FILE:classpath}
+  type:file: ${TYPE_FILE:}

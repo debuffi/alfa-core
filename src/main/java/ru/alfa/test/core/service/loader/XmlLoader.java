@@ -10,7 +10,7 @@ import ru.alfa.test.core.domain.model.LinkType;
  * @author Vyacheslav Savinov
  * @since 25.01.2021
  */
-public interface XmlLoaderService {
+public interface XmlLoader {
     LinkType getLinkType();
 
     XmlFileContainer loadFile(final String file) throws IOException, URISyntaxException;

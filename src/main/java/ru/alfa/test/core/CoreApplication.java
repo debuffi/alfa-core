@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.Arrays;
 
+import javax.xml.bind.JAXBException;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -37,7 +39,7 @@ public class CoreApplication implements CommandLineRunner {
     }
 
     @Override
-    public void run(String... args) throws IOException, URISyntaxException {
+    public void run(String... args) throws IOException, URISyntaxException, JAXBException {
         appStartProcessor.process();
     }
 }
