@@ -1,8 +1,9 @@
-package ru.alfa.test.core.controller;
+package ru.alfa.test.core.config;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,8 +20,7 @@ public class XmlLoadersConfig {
 
     @Bean
     public Map<LinkType, XmlLoader> xmlLoaders(final List<XmlLoader> xmlLoaders) {
-        return new HashMap<LinkType, XmlLoader>() {{
-            xmlLoaders.forEach(xmlLoader -> put(xmlLoader.getLinkType(), xmlLoader));
-        }};
+        return xmlLoaders.stream()
+                .collect(Collectors.toMap(XmlLoader::getLinkType, Function.identity()));
     }
 }
