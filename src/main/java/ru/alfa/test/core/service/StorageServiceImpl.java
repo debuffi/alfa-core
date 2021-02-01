@@ -2,8 +2,11 @@ package ru.alfa.test.core.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBContext;
@@ -17,6 +20,7 @@ import ru.alfa.test.core.domain.dto.StorageContainer;
 import ru.alfa.test.core.domain.dto.XmlFileContainer;
 import ru.alfa.test.core.domain.entity.Box;
 import ru.alfa.test.core.domain.entity.Item;
+import ru.alfa.test.core.domain.exception.BoxNotFoundException;
 import ru.alfa.test.core.domain.exception.BoxValidationException;
 import ru.alfa.test.core.domain.exception.ItemValidationException;
 import ru.alfa.test.core.mapper.BoxMapper;
@@ -80,7 +84,7 @@ public class StorageServiceImpl implements StorageService {
             }
 
             final Box box = boxMapper.toEntity(boxDto);
-            box.setContainedIn(externalBox.getId());
+            box.setContainedIn(externalBox);
             boxMap.put(box.getId(), box);
 
             if (!CollectionUtils.isEmpty(boxDto.getItem())) {
@@ -102,5 +106,32 @@ public class StorageServiceImpl implements StorageService {
             item.setContainedIn(externalBox);
             itemMap.put(item.getId(), item);
         });
+    }
+
+    @Override
+    public Set<Item> findItemsInsideBoxByColor(final String color, final Integer boxId) {
+        final Box externalBox = findBoxById(boxId);
+        final List<Box> innerBoxes = new ArrayList<>(Arrays.asList(externalBox));
+
+        extractInnerBoxIds(externalBox.getContainerOut(), innerBoxes);
+        return findItemIdsByBoxIdsAndColor(innerBoxes, color);
+    }
+
+
+    private Box findBoxById(final Integer boxId) {
+        return boxRepository.findById(boxId).orElseThrow(BoxNotFoundException::new);
+    }
+
+    private void extractInnerBoxIds(final List<Box> externalBoxes, final List<Box> list) {
+        externalBoxes.forEach(container -> {
+            list.add(container);
+            if (!CollectionUtils.isEmpty(container.getContainerOut())) {
+                extractInnerBoxIds(container.getContainerOut(), list);
+            }
+        });
+    }
+
+    private Set<Item> findItemIdsByBoxIdsAndColor(final List<Box> innerBoxes, final String color) {
+        return itemRepository.findByContainedInInAndColor(innerBoxes, color);
     }
 }

@@ -6,6 +6,7 @@ import java.util.Arrays;
 
 import javax.xml.bind.JAXBException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,6 +21,9 @@ import lombok.extern.slf4j.Slf4j;
 @SpringBootApplication
 @RequiredArgsConstructor
 public class CoreApplication implements CommandLineRunner {
+
+    @Value("${link.type:path}")
+    private String typePath;
 
     private final AppStartProcessor appStartProcessor;
 
@@ -40,6 +44,6 @@ public class CoreApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws IOException, URISyntaxException, JAXBException {
-        appStartProcessor.process();
+        appStartProcessor.process(typePath);
     }
 }

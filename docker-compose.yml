@@ -1,0 +1,28 @@
+version: "3.4"
+
+services:
+
+  alfa-core:
+    container_name: alfa-core
+    depends_on:
+      - postgres
+    build: .
+    environment:
+      - DB_URL=postgres
+    ports:
+      - 8080:8080
+    networks:
+      - back
+      -
+  postgres:
+    image: postgres:12
+    environment:
+      - POSTGRES_PASSWORD=1234
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=postgres
+    networks:
+      - back
+
+networks:
+  back:
+    driver: bridge

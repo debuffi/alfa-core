@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Entity
 @Table(name = "item")
-@EqualsAndHashCode
 public class Item {
 
     @Id

@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 import ru.alfa.test.core.domain.dto.XmlFileContainer;
 import ru.alfa.test.core.domain.model.LinkType;
 import ru.alfa.test.core.service.loader.XmlLoader;
-import ru.alfa.test.core.service.util.TypeFilePair;
+import ru.alfa.test.core.service.util.TypePathPair;
 
 import generated.Storage;
 import lombok.RequiredArgsConstructor;
@@ -29,29 +29,26 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class AppStartProcessor {
 
-    @Value("${link.type:file}")
-    private String typeFile;
-
     private final Map<LinkType, XmlLoader> xmlLoaders;
     private final StorageService storageService;
 
 
-    public void process() throws IOException, URISyntaxException, JAXBException {
-        if (Strings.isBlank(typeFile)) {
-            log.debug("Type:file is blank. No need to parse and insert data");
+    public void process(final String typePath) throws IOException, URISyntaxException, JAXBException {
+        if (Strings.isBlank(typePath)) {
+            log.debug("Type:path is blank. No need to parse and insert data");
             return;
         }
-        final Pair<String, String> typeFilePair = TypeFilePair.fromString(typeFile);
-        final String type = typeFilePair.getKey();
-        final String file = typeFilePair.getValue();
+        final Pair<String, String> typePathPair = TypePathPair.fromString(typePath);
+        final String type = typePathPair.getKey();
+        final String path = typePathPair.getValue();
+        log.debug("Try to load data from XML with type: {} and path: {}", type, path);
 
         final LinkType linkType = LinkType.findByValue(type);
         final XmlLoader xmlLoader = xmlLoaders.get(linkType);
-        final XmlFileContainer xmlFileContainer = xmlLoader.loadFile(file);
+        final XmlFileContainer xmlFileContainer = xmlLoader.loadFile(path);
         final Storage storage = storageService.parse(xmlFileContainer);
         storageService.handle(storage);
 
-        System.out.println(storage);
-        System.out.println(xmlFileContainer);
+        log.info("Loading data from XML was successful");
     }
 }
